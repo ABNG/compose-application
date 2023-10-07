@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Compose Application</string>
+    <string name="web_client_id">567109134811-sp4p3r9dum9i21s34uq8nmeespqd4a35.apps.googleusercontent.com</string>
+    <string name="show_more">Show more</string>
+    <string name="show_less">Show less</string>
+    <string name="onboard1_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Augue lacus viverra vitae congue eu consequat ac felis. Auctor augue mauris augue neque gravida in fermentum et sollicitudin. Magna sit amet purus gravida quis blandit turpis cursus in</string>
+    <string name="blank_email_error_message">email is required</string>
+    <string name="invalid_email_error_message">email is invalid</string>
+    <string name="blank_name_error_message">name is required</string>
+    <string name="blank_password_error_message">password is required</string>
+    <string name="invalid_format_password_error_message">password should contain digit and letter</string>
+    <string name="no_match_confirm_password_error_message">password mismatch</string>
+    <string name="accepted_terms_error_message">Please accept the terms</string>
+    <string name="home">home</string>
+    <string name="category">category</string>
+    <string name="cart">cart</string>
+    <string name="profile">profile</string>
+    <string name="main">main</string>
+    <string name="fruits">Fruits</string>
+    <string name="juices">Juices</string>
+    <string name="medicine">Medicine</string>
+    <string name="electronics">Electronics</string>
+    <string name="sports">Sports</string>
+    <string name="image_required_error_message">image is required</string>
+    <string name="blank_dob_error_message">date of birth required</string>
+    <string name="blank_phone_number_error_message">phone number is required</string>
+    <string name="phone_number_length_error_message">phone number should be 10 digit long</string>
+    <string name="password_length_error_message">password should 6 digit long</string>
+</resources>
