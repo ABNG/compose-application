@@ -18,6 +18,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -27,7 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.compose.app.R
 import com.compose.app.presentation.category.view.CategoryContentScreen
 import com.compose.app.presentation.util.NoRippleInteractionSource
 import com.compose.app.presentation.util.UiState
@@ -36,6 +36,7 @@ import com.compose.app.presentation.util.widget.ErrorStateWidget
 import com.compose.app.presentation.util.widget.LoadingStateWidget
 import com.compose.app.presentation.util.widget.NoneStateWidget
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -51,7 +52,7 @@ fun CategoryScreen(
                 modifier = modifier,
                 errorMessage = categoryState.errorMessage
             ) {
-                categoryViewModel.getAllCategories(10)
+                categoryViewModel.getAllCategories(5)
             }
         }
 
@@ -66,16 +67,27 @@ fun CategoryScreen(
         }
 
         is UiState.Success -> {
+            val selectedIndex = remember {
+                categoryViewModel.selectedCategoryIndex
+            }
             val tabs = categoryState.data!!
             val scrollBehavior =
                 TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
-            val pagerState = rememberPagerState(pageCount = {
-                tabs.size
-            })
+            val pagerState = rememberPagerState(
+                pageCount = {
+                    tabs.size
+                }
+            )
             val coroutineScope = rememberCoroutineScope()
             val primaryContainerColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
 
+            LaunchedEffect(selectedIndex) {
+                if (selectedIndex != -1) {
+                    pagerState.animateScrollToPage(selectedIndex)
+                    categoryViewModel.selectedCategoryIndex = -1
+                }
+            }
 
 
             Scaffold(
@@ -143,7 +155,7 @@ fun CategoryScreen(
 
                 ) {
 
-                HorizontalPager(state = pagerState, modifier = modifier.padding(it),) { page ->
+                HorizontalPager(state = pagerState, modifier = modifier.padding(it)) { page ->
                     // Our page content
                     CategoryContentScreen(
                         navController = navController,

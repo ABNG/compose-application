@@ -1,6 +1,7 @@
 package com.compose.app.presentation.home.widget
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,16 +29,16 @@ import com.compose.app.data.remote.product.model.category.CategoryModelItem
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun CategoryWidget(modifier: Modifier = Modifier, categoryData: ImmutableList<CategoryModelItem>) {
+fun CategoryWidget(modifier: Modifier = Modifier, categoryData: ImmutableList<CategoryModelItem>, onClick:(Int)-> Unit) {
 
     LazyRow(
         modifier = modifier,
         contentPadding = PaddingValues(horizontal = 12.dp)
     ) {
-        items(items = categoryData,
-            key = { item ->
+        itemsIndexed(items = categoryData,
+            key = { index, item ->
                 item.id
-            }) { categoryItem ->
+            }) { index, categoryItem ->
             Box(
                 modifier = modifier
                     .fillMaxHeight()
@@ -44,6 +46,9 @@ fun CategoryWidget(modifier: Modifier = Modifier, categoryData: ImmutableList<Ca
                     .clip(RoundedCornerShape(12.dp))
                     .background(MaterialTheme.colorScheme.primaryContainer)
                     .padding(end = 16.dp)
+                    .clickable {
+                        onClick(index)
+                    }
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

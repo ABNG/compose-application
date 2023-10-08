@@ -43,17 +43,19 @@ fun MyBottomBar(navController: NavHostController) {
                     label = { Text(stringResource(screen.title!!)) },
                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     onClick = {
-                        navController.navigate(screen.route) {
-
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.switchTabs(screen.route)
                     }
                 )
             }
         }
+    }
+}
+fun NavHostController.switchTabs(route: String) {
+    navigate(route) {
+        popUpTo(graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }

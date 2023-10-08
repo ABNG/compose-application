@@ -1,6 +1,7 @@
 package com.compose.app.presentation.category.screen
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,10 @@ class CategoryViewModel @Inject constructor(
         UiState.None()
     )
         private set
+
+    var selectedCategoryIndex by mutableIntStateOf(
+        -1
+    )
 
     fun getAllCategories(limit: Int) = viewModelScope.launch {
         categoryState = UiState.Loading()

@@ -28,6 +28,7 @@ import com.compose.app.presentation.category.screen.CategoryViewModel
 import com.compose.app.presentation.home.widget.CarousalSlider
 import com.compose.app.presentation.home.widget.CategoryWidget
 import com.compose.app.presentation.home.widget.NewArrivedProductList
+import com.compose.app.presentation.main.widget.switchTabs
 import com.compose.app.presentation.util.UiState
 import com.compose.app.presentation.util.widget.AppBarBackButtonWidget
 import com.compose.app.presentation.util.widget.ErrorStateWidget
@@ -53,7 +54,7 @@ fun HomeScreen(
 
     LaunchedEffect(Unit) {
         if (categoryState is UiState.None) {
-            categoryViewModel.getAllCategories(10)
+            categoryViewModel.getAllCategories(5)
         }
 
         if (productState is UiState.None) {
@@ -101,7 +102,7 @@ fun HomeScreen(
                                     modifier = modifier,
                                     errorMessage = categoryState.errorMessage
                                 ) {
-                                    categoryViewModel.getAllCategories(10)
+                                    categoryViewModel.getAllCategories(5)
                                 }
                             }
 
@@ -117,7 +118,11 @@ fun HomeScreen(
                                 CategoryWidget(
                                     modifier = modifier,
                                     categoryData = categoryState.data!!.toImmutableList()
-                                )
+                                ) { index ->
+                                    categoryViewModel.selectedCategoryIndex = index
+                                    navController.switchTabs(MainDestination.Category.route)
+
+                                }
                             }
                         }
                     }
