@@ -1,7 +1,6 @@
 package com.compose.app.di.network
 
 import com.compose.app.BuildConfig
-import com.compose.app.data.remote.category.CategoryApiService
 import com.compose.app.data.remote.product.ProductApiService
 import dagger.Module
 import dagger.Provides
@@ -46,8 +45,8 @@ object NetworkModule {
     fun provideProductApiService(retrofit: Retrofit): ProductApiService =
         retrofit.create(ProductApiService::class.java)
 
-    @Singleton
-    @Provides
-    fun provideCategoryApiService(retrofit: Retrofit): CategoryApiService =
-        retrofit.create(CategoryApiService::class.java)
+//    @Singleton
+//    @Provides
+//    fun provideCategoryApiService(retrofit: Retrofit): CategoryApiService =
+//        retrofit.create(CategoryApiService::class.java)
 }

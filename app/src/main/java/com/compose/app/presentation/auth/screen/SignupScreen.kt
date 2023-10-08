@@ -27,8 +27,8 @@ import com.compose.app.presentation.auth.bloc.RegistrationViewModel
 import com.compose.app.presentation.auth.widget.AcceptTermWidget
 import com.compose.app.presentation.auth.widget.CustomTextField
 import com.compose.app.presentation.util.UiState
-import com.compose.app.presentation.util.widget.loading.LoadingDialogWidget
-import com.compose.app.presentation.util.widget.loading.rememberDialogState
+import com.compose.app.presentation.util.widget.loading_dialog.LoadingDialogWidget
+import com.compose.app.presentation.util.widget.loading_dialog.rememberDialogState
 
 @Composable
 fun SignupScreen(

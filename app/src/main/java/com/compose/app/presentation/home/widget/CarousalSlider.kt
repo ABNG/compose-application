@@ -1,4 +1,4 @@
-package com.compose.app.presentation.home.screen.widget
+package com.compose.app.presentation.home.widget
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

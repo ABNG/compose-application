@@ -1,4 +1,4 @@
-package com.compose.app.presentation.checkout.screen.widget
+package com.compose.app.presentation.checkout.widget
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

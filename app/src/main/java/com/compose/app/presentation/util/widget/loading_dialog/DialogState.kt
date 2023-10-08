@@ -1,10 +1,9 @@
-package com.compose.app.presentation.util.widget.loading
+package com.compose.app.presentation.util.widget.loading_dialog
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import kotlinx.parcelize.Parcelize

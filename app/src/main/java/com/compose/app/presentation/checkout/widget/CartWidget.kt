@@ -1,4 +1,4 @@
-package com.compose.app.presentation.checkout.screen.widget
+package com.compose.app.presentation.checkout.widget
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image

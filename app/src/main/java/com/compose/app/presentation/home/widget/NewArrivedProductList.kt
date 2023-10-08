@@ -1,4 +1,4 @@
-package com.compose.app.presentation.home.screen.widget
+package com.compose.app.presentation.home.widget
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,9 +18,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -28,17 +30,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.compose.app.R
+import com.compose.app.data.remote.product.model.product.ProductModelItem
+import com.compose.app.presentation.util.ComposeLifecycleObserver
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun NewArrivedProductList(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
+fun NewArrivedProductList(modifier: Modifier = Modifier, productModelItem: ProductModelItem, onClick: () -> Unit) {
 
-    val productImages = listOf(
-        R.drawable.banner_2,
-        R.drawable.banner_3,
-        R.drawable.banner_4,
-    )
     Card(
         modifier = Modifier
             .padding(6.dp)
@@ -50,10 +51,9 @@ fun NewArrivedProductList(modifier: Modifier = Modifier, text: String, onClick: 
     ) {
 
         Column {
-            Image(
-                painter = painterResource(
-                    id = productImages.random()
-                ),
+            AsyncImage(
+                model =  ImageRequest.Builder(LocalContext.current).data(productModelItem.images.first())
+                    .crossfade(enable = true).build(),
                 contentDescription = "Product Image",
                 contentScale = ContentScale.Crop,
                 modifier = modifier.weight(2f)
@@ -67,7 +67,7 @@ fun NewArrivedProductList(modifier: Modifier = Modifier, text: String, onClick: 
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 ) {
-                    append("AED")
+                    append("SAR")
                 }
                 withStyle(
                     style = SpanStyle(
@@ -76,7 +76,7 @@ fun NewArrivedProductList(modifier: Modifier = Modifier, text: String, onClick: 
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 ) {
-                    append("29")
+                    append(productModelItem.price.toString())
                 }
             }, modifier = modifier.padding(start = 10.dp))
 
@@ -87,9 +87,10 @@ fun NewArrivedProductList(modifier: Modifier = Modifier, text: String, onClick: 
                     .padding(horizontal = 10.dp, vertical = 3.dp)
             ) {
                 Text(
-                    text = "Product $text", fontSize = 16.sp,
+                    text = productModelItem.title, fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = modifier.weight(1f)
                 )
 
                 Row {

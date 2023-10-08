@@ -9,7 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.compose.app.navigation.nav_graph.main.MainNavGraph
-import com.compose.app.presentation.main.screen.widget.MyBottomBar
+import com.compose.app.presentation.main.widget.MyBottomBar
 import com.compose.app.presentation.util.AppPreferencesViewModel
 
 @Composable

@@ -41,9 +41,8 @@ import com.compose.app.presentation.auth.widget.CustomTextField
 import com.compose.app.presentation.util.UiState
 import com.compose.app.presentation.auth.widget.google_signin.GoogleSignInWidget
 import com.compose.app.presentation.auth.widget.google_signin.rememberGoogleSignInDialogState
-import com.compose.app.presentation.util.widget.loading.LoadingDialogWidget
-import com.compose.app.presentation.util.widget.loading.rememberDialogState
-import timber.log.Timber
+import com.compose.app.presentation.util.widget.loading_dialog.LoadingDialogWidget
+import com.compose.app.presentation.util.widget.loading_dialog.rememberDialogState
 
 @Composable
 fun LoginScreen(navController: NavHostController, modifier: Modifier = Modifier) {

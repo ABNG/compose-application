@@ -1,4 +1,4 @@
-package com.compose.app.data.remote.category.model
+package com.compose.app.data.remote.product.model.category
 
 
 import com.squareup.moshi.Json

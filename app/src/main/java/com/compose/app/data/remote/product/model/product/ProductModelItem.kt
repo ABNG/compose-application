@@ -1,7 +1,7 @@
-package com.compose.app.data.remote.product.model
+package com.compose.app.data.remote.product.model.product
 
 
-import com.compose.app.data.remote.category.model.CategoryModelItem
+import com.compose.app.data.remote.product.model.category.CategoryModelItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

@@ -1,4 +1,4 @@
-package com.compose.app.presentation.checkout.screen.widget
+package com.compose.app.presentation.checkout.widget
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

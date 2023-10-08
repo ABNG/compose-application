@@ -1,4 +1,4 @@
-package com.compose.app.presentation.onboard.screen.widget
+package com.compose.app.presentation.onboard.widget
 
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes

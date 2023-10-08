@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.compose.app.R
 import com.compose.app.navigation.nav_graph.root.RootDestination
-import com.compose.app.presentation.onboard.screen.widget.OnBoardWidget
+import com.compose.app.presentation.onboard.widget.OnBoardWidget
 
 @Composable
 fun FirstOnBoardScreen(navController: NavHostController) {

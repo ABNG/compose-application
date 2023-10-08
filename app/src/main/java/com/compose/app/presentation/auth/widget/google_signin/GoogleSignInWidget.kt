@@ -7,14 +7,12 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.compose.app.data.firebase.model.FirebaseUserModel
 import com.compose.app.presentation.util.UiState
-import com.compose.app.presentation.util.widget.loading.LoadingDialogWidget
-import com.compose.app.presentation.util.widget.loading.rememberDialogState
+import com.compose.app.presentation.util.widget.loading_dialog.LoadingDialogWidget
+import com.compose.app.presentation.util.widget.loading_dialog.rememberDialogState
 import com.google.android.gms.auth.api.identity.Identity
 
 

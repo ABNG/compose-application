@@ -29,121 +29,132 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.compose.app.R
 import com.compose.app.presentation.category.view.CategoryContentScreen
-import com.compose.app.presentation.util.widget.AppBarBackButtonWidget
 import com.compose.app.presentation.util.NoRippleInteractionSource
+import com.compose.app.presentation.util.UiState
+import com.compose.app.presentation.util.widget.AppBarBackButtonWidget
+import com.compose.app.presentation.util.widget.ErrorStateWidget
+import com.compose.app.presentation.util.widget.LoadingStateWidget
+import com.compose.app.presentation.util.widget.NoneStateWidget
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun CategoryScreen(navController: NavHostController, modifier: Modifier = Modifier){
-    val imageList = remember {
-        listOf(
-            R.drawable.android,
-            R.drawable.android_logo,
-            R.drawable.android_developer_mode,
-            R.drawable.gaming_laptop,
-        )
-    }
+fun CategoryScreen(
+    navController: NavHostController,
+    categoryViewModel: CategoryViewModel,
+    modifier: Modifier = Modifier
+) {
 
-    val tabs = remember {
-        listOf(
-            "All",
-            "Sports",
-            "Electronics",
-            "Food",
-            "Drinks",
-            "Ice Cream",
-            "Meat & Fish",
-            "Beauty",
-            "Toys & Games",
-            "Gaming"
-        )
-    }
+    when (val categoryState = categoryViewModel.categoryState) {
+        is UiState.Error -> {
+            ErrorStateWidget(
+                modifier = modifier,
+                errorMessage = categoryState.errorMessage
+            ) {
+                categoryViewModel.getAllCategories(10)
+            }
+        }
 
-    val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+        is UiState.Loading -> {
+            LoadingStateWidget(modifier = modifier)
+        }
 
-    val pagerState = rememberPagerState(pageCount = {
-        tabs.size
-    })
-    val coroutineScope = rememberCoroutineScope()
-    val primaryContainerColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
+        is UiState.None -> {
+            NoneStateWidget(
+                message = categoryState.message
+            )
+        }
+
+        is UiState.Success -> {
+            val tabs = categoryState.data!!
+            val scrollBehavior =
+                TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
+            val pagerState = rememberPagerState(pageCount = {
+                tabs.size
+            })
+            val coroutineScope = rememberCoroutineScope()
+            val primaryContainerColor: Color = MaterialTheme.colorScheme.onPrimaryContainer
 
 
 
-    Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            Column {
-                TopAppBar(
-                    title = {
-                        Text("Category")
-                    },
-                    scrollBehavior = scrollBehavior,
-                    navigationIcon = {
-                        AppBarBackButtonWidget(navController)
-                    },
-                )
+            Scaffold(
+                modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                topBar = {
+                    Column {
+                        TopAppBar(
+                            title = {
+                                Text("Category")
+                            },
+                            scrollBehavior = scrollBehavior,
+                            navigationIcon = {
+                                AppBarBackButtonWidget(navController)
+                            },
+                        )
 //                CenterAlignedTopAppBar(title = {
 //                    Text("Category")
 //                })
 
-                ScrollableTabRow(
-                    selectedTabIndex = pagerState.currentPage,
-                    edgePadding = 0.dp,
-                    indicator = {
-                        Box(
-                            modifier = modifier
-                                .tabIndicatorOffset(it[pagerState.currentPage])
-                                .fillMaxSize()
-                                .padding(vertical = 5.dp)
-                                .drawBehind {
-                                    drawRoundRect(
-                                       color =  primaryContainerColor.copy(alpha = 0.2f),
-                                        cornerRadius = CornerRadius(10.dp.toPx())
-                                    )
-                                }
-                        )
-                    }
-                ) {
-                    tabs.forEachIndexed { index, tabTitle ->
-                        Tab(
-                            selected = pagerState.currentPage == index,
-                            onClick = {
-                                coroutineScope.launch {
-                                    pagerState.animateScrollToPage(index)
-                                }
-                            },
-                            selectedContentColor = Color.Black,
-                            unselectedContentColor = MaterialTheme.colorScheme.primary,
-                            interactionSource = NoRippleInteractionSource(),
-                            text = {
-                                Text(
-                                    text = tabTitle,
+                        ScrollableTabRow(
+                            selectedTabIndex = pagerState.currentPage,
+                            edgePadding = 0.dp,
+                            indicator = {
+                                Box(
+                                    modifier = modifier
+                                        .tabIndicatorOffset(it[pagerState.currentPage])
+                                        .fillMaxSize()
+                                        .padding(vertical = 5.dp)
+                                        .drawBehind {
+                                            drawRoundRect(
+                                                color = primaryContainerColor.copy(alpha = 0.2f),
+                                                cornerRadius = CornerRadius(10.dp.toPx())
+                                            )
+                                        }
                                 )
-                            },
+                            }
+                        ) {
+                            tabs.forEachIndexed { index, categoryItem ->
+                                Tab(
+                                    selected = pagerState.currentPage == index,
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            pagerState.animateScrollToPage(index)
+                                        }
+                                    },
+                                    selectedContentColor = Color.Black,
+                                    unselectedContentColor = MaterialTheme.colorScheme.primary,
+                                    interactionSource = NoRippleInteractionSource(),
+                                    text = {
+                                        Text(
+                                            text = categoryItem.name,
+                                        )
+                                    },
 //                            icon = {
 //                                Icon(
 //                                    imageVector = Icons.Default.ShoppingCart,
 //                                    contentDescription = null
 //                                )
 //                            }
-                        )
+                                )
+                            }
+                        }
                     }
+                },
+
+                ) {
+
+                HorizontalPager(state = pagerState, modifier = modifier.padding(it),) { page ->
+                    // Our page content
+                    CategoryContentScreen(
+                        navController = navController,
+                        modifier = modifier,
+                        categoryId = tabs[page].id
+                    )
                 }
+
             }
-        },
-
-        ) {
-
-        HorizontalPager(state = pagerState, modifier = modifier.padding(it)) { page ->
-            // Our page content
-            CategoryContentScreen(
-                navController = navController,
-                modifier = modifier,
-                image = imageList[0],
-            )
         }
-
     }
+
+
 }
