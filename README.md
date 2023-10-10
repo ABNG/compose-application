@@ -42,3 +42,11 @@
  * [Permissions](https://google.github.io/accompanist/permissions/) A library which provides Android runtime permissions support for Jetpack Compose.
  * [Firebase Auth (Google and Email/Password)](https://firebase.google.com/docs/auth)  let your users authenticate with Firebase.
  * [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers.
+
+## How to install?
+
+You can install this application to test on your android smartphone. To download the signed application go to your chrome browser and copy-paste the download link:
+
+```
+https://github.com/ABNG/compose-application/releases
+```
