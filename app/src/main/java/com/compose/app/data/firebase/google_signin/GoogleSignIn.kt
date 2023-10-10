@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.IntentSenderRequest
 import com.compose.app.data.firebase.model.FirebaseUserModel
+import com.compose.app.data.firebase.model.UserModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
@@ -52,7 +53,7 @@ class GoogleSignIn @Inject constructor() {
         oneTapClient: SignInClient,
         isResultSuccess: Boolean,
         resultData: Intent?,
-    ): FirebaseUserModel {
+    ): UserModel {
         try {
             if (isResultSuccess) {
                 val credential = oneTapClient.getSignInCredentialFromIntent(resultData)
@@ -65,9 +66,13 @@ class GoogleSignIn @Inject constructor() {
                         try {
                             val user: FirebaseUser? =
                                 auth.signInWithCredential(firebaseCredential).await().user
-                            return FirebaseUserModel(
+                            return UserModel(
                                 token = idToken,
-                                user = user
+                                user = FirebaseUserModel(
+                                    name = user?.displayName,
+                                    email = user?.email,
+                                    photoUrl = user?.photoUrl?.toString()
+                                )
                             )
                         } catch (e: Exception) {
                             e.printStackTrace()

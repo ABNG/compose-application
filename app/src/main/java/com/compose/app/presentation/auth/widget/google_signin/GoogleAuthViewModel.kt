@@ -3,7 +3,7 @@ package com.compose.app.presentation.auth.widget.google_signin
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.compose.app.data.firebase.model.FirebaseUserModel
+import com.compose.app.data.firebase.model.UserModel
 import com.compose.app.domain.repository.FirebaseAuthRepository
 import com.compose.app.presentation.util.UiState
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -18,7 +18,7 @@ class GoogleAuthViewModel @Inject constructor(
     private val authRepository: FirebaseAuthRepository
 ) : ViewModel() {
 
-    private val uiStateChannel = Channel<UiState<FirebaseUserModel>>()
+    private val uiStateChannel = Channel<UiState<UserModel>>()
     val uiState = uiStateChannel.receiveAsFlow()
 
     suspend fun googleSignIn(
@@ -46,12 +46,12 @@ class GoogleAuthViewModel @Inject constructor(
         viewModelScope.launch {
             uiStateChannel.send(UiState.Loading());
             try {
-                val firebaseUserModel = authRepository.googleSignInWithIntent(
+                val UserModel = authRepository.googleSignInWithIntent(
                     oneTapClient,
                     isResultSuccess,
                     resultData
                 )
-                uiStateChannel.send(UiState.Success(firebaseUserModel))
+                uiStateChannel.send(UiState.Success(UserModel))
             } catch (e: Exception) {
                 e.printStackTrace()
                 uiStateChannel.send(UiState.Error(errorMessage = e.message.toString()))

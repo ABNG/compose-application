@@ -16,7 +16,14 @@ sealed class MainDestination(
     @StringRes val title: Int? = null,
     val icon: ImageVector? = null
 ) {
-    data object Main : MainDestination("main")
+    data object Main : MainDestination("main/{user}"){
+        val arguments = listOf(
+            navArgument("user") {
+                type = NavType.StringType
+            }
+        )
+        fun routeWithUserModel(userModel: String) = "main/$userModel"
+    }
     data object Home : MainDestination("home", R.string.home, Icons.Default.Home)
     data object Category : MainDestination("category", R.string.category, Icons.Default.Search)
     data object Cart : MainDestination("cart", R.string.cart, Icons.Default.ShoppingCart)

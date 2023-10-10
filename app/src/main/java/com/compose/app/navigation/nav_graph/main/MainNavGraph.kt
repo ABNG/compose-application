@@ -9,6 +9,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.compose.app.data.firebase.model.LocalUserModel
 import com.compose.app.navigation.nav_graph.Graph
 import com.compose.app.navigation.nav_graph.repeated_routes.authRoute
 import com.compose.app.presentation.address.screen.AddressScreen
@@ -21,6 +22,7 @@ import com.compose.app.presentation.home.screen.HomeScreen
 import com.compose.app.presentation.profile.screen.ProfileScreen
 import com.compose.app.presentation.profile.screen.UpdateProfileScreen
 import com.compose.app.presentation.success.screen.SuccessScreen
+import com.compose.app.presentation.util.UserViewModel
 
 @Composable
 fun MainNavGraph(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -41,8 +43,12 @@ fun MainNavGraph(navController: NavHostController, modifier: Modifier = Modifier
         composable(route = MainDestination.Cart.route) {
             CartScreen(navController)
         }
-        composable(route = MainDestination.Profile.route) {
-            ProfileScreen(navController)
+        composable(route = MainDestination.Profile.route) { entry ->
+            val userViewModel = entry.sharedViewModel<UserViewModel>(navController)
+            if (userViewModel.userModel == null) {
+                userViewModel.initUserModel(LocalUserModel.current)
+            }
+            ProfileScreen(userViewModel = userViewModel, navController)
         }
         composable(
             route = MainDestination.Detail.route,
@@ -59,8 +65,9 @@ fun MainNavGraph(navController: NavHostController, modifier: Modifier = Modifier
         composable(route = MainDestination.Success.route) {
             SuccessScreen(navController)
         }
-        composable(route = MainDestination.UpdateProfile.route) {
-            UpdateProfileScreen(navController)
+        composable(route = MainDestination.UpdateProfile.route) { entry ->
+            val userViewModel = entry.sharedViewModel<UserViewModel>(navController)
+            UpdateProfileScreen(userViewModel = userViewModel, navController)
         }
         authRoute()
     }

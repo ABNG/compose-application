@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.compose.app.data.firebase.model.FirebaseUserModel
+import com.compose.app.data.firebase.model.UserModel
 import com.compose.app.domain.repository.FirebaseAuthRepository
 import com.compose.app.domain.use_case.ValidateAcceptedTerms
 import com.compose.app.domain.use_case.ValidateConfirmPassword
@@ -33,7 +33,7 @@ class RegistrationViewModel @Inject constructor(
     var validationState by mutableStateOf(RegistrationFormValidationState())
         private set
 
-    private val uiStateChannel = Channel<UiState<FirebaseUserModel>>()
+    private val uiStateChannel = Channel<UiState<UserModel>>()
     val uiState = uiStateChannel.receiveAsFlow()
 
 

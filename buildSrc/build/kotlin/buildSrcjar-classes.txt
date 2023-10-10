@@ -1,0 +1,1 @@
+/Users/abubakarnawaz/Documents/androidprojects/ComposeApplication/buildSrc/build/classes/kotlin/main/Config.class:/Users/abubakarnawaz/Documents/androidprojects/ComposeApplication/buildSrc/build/classes/kotlin/main/Version.class

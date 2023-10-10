@@ -53,7 +53,7 @@ fun SignupScreen(
 
                 is UiState.Success -> {
                     dialogState.closeDialog()
-                    if (uiState.data!!.user != null) {
+                    if (uiState.data!!.user?.email != null) {
                         Toast.makeText(context, "Registration Successful", Toast.LENGTH_LONG)
                             .show()
                         navController.popBackStack()

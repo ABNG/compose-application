@@ -5,6 +5,7 @@ import androidx.activity.result.IntentSenderRequest
 import com.compose.app.data.firebase.email_password_signin.EmailPasswordSignIn
 import com.compose.app.data.firebase.google_signin.GoogleSignIn
 import com.compose.app.data.firebase.model.FirebaseUserModel
+import com.compose.app.data.firebase.model.UserModel
 import com.compose.app.domain.repository.FirebaseAuthRepository
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
@@ -28,25 +29,29 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
     override suspend fun googleSignInWithIntent(
         oneTapClient: SignInClient, isResultSuccess: Boolean, resultData: Intent?
-    ): FirebaseUserModel = firebaseGoogleSignIn.signInWithIntent(
+    ): UserModel = firebaseGoogleSignIn.signInWithIntent(
         oneTapClient, isResultSuccess, resultData
     )
 
     override suspend fun createUserWithEmailAndPassword(
         email: String,
         password: String
-    ): FirebaseUserModel =
+    ): UserModel =
         firebaseEmailPasswordSignIn.createUserWithEmailAndPassword(email, password)
 
 
     override suspend fun signInUserWithEmailAndPassword(
         email: String, password: String
-    ): FirebaseUserModel =
+    ): UserModel =
         firebaseEmailPasswordSignIn.signInUserWithEmailAndPassword(email, password)
 
-    override fun currentSignedInUser(): FirebaseUserModel =
-        FirebaseUserModel(
-            user = auth.currentUser
+    override fun currentSignedInUser(): UserModel =
+        UserModel(
+            user = FirebaseUserModel(
+                name = auth.currentUser?.displayName,
+                email = auth.currentUser?.email,
+                photoUrl = auth.currentUser?.photoUrl?.toString()
+            )
         )
 
     override fun signOut() = auth.signOut()

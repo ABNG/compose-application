@@ -2,7 +2,7 @@ package com.compose.app.domain.repository
 
 import android.content.Intent
 import androidx.activity.result.IntentSenderRequest
-import com.compose.app.data.firebase.model.FirebaseUserModel
+import com.compose.app.data.firebase.model.UserModel
 import com.google.android.gms.auth.api.identity.SignInClient
 
 interface FirebaseAuthRepository {
@@ -16,12 +16,12 @@ interface FirebaseAuthRepository {
         oneTapClient: SignInClient,
         isResultSuccess: Boolean,
         resultData: Intent?,
-    ): FirebaseUserModel
+    ): UserModel
 
-    suspend fun createUserWithEmailAndPassword(email: String, password: String): FirebaseUserModel
-    suspend fun signInUserWithEmailAndPassword(email: String, password: String): FirebaseUserModel
+    suspend fun createUserWithEmailAndPassword(email: String, password: String): UserModel
+    suspend fun signInUserWithEmailAndPassword(email: String, password: String): UserModel
 
-    fun currentSignedInUser() : FirebaseUserModel
+    fun currentSignedInUser() : UserModel
     fun signOut() : Unit
 
 }

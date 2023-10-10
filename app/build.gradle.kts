@@ -20,14 +20,14 @@ android {
         }
     }
     namespace = "com.compose.app"
-    compileSdk = 34
+    compileSdk = Config.compileSdkVersion
 
     defaultConfig {
-        applicationId = "com.compose.app"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = Config.applicationId
+        minSdk = Config.minSdkVersion
+        targetSdk = Config.targetSdkVersion
+        versionCode = Config.versionCode
+        versionName = Config.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -72,6 +72,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
+    //compose
     implementation(platform("androidx.compose:compose-bom:2023.09.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
@@ -79,32 +80,45 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.navigation:navigation-compose:2.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
+    //lottie
     implementation("com.airbnb.android:lottie-compose:6.1.0")
-    implementation("com.google.dagger:hilt-android:2.48")
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    //hilt
+    implementation("com.google.dagger:hilt-android:${Version.hilt}")
+    kapt("com.google.dagger:hilt-android-compiler:${Version.hilt}")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    //maps
     implementation("com.google.maps.android:maps-compose:2.14.1")
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    //permissions
     implementation("com.google.accompanist:accompanist-permissions:0.33.1-alpha")
+    //logging
     implementation("com.jakewharton.timber:timber:5.0.1")
-    val coilVersion = "2.4.0"
-    implementation("io.coil-kt:coil-compose:$coilVersion")
-    implementation("io.coil-kt:coil-svg:$coilVersion")
+    //coil
+    implementation("io.coil-kt:coil-compose:${Version.coil}")
+    implementation("io.coil-kt:coil-svg:${Version.coil}")
+    //datastore
     implementation("androidx.datastore:datastore:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    //firebase
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    //auth
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     //networking
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.squareup.retrofit2:retrofit:${Version.retrofit}")
+    implementation("com.squareup.retrofit2:converter-moshi:${Version.converterMoshi}")
+    implementation("com.squareup.okhttp3:logging-interceptor:${Version.okhttp}")
     //moshi
-    implementation("com.squareup.moshi:moshi:1.14.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
+    implementation("com.squareup.moshi:moshi:${Version.moshi}")
+    implementation("com.squareup.moshi:moshi-kotlin:${Version.moshi}")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:${Version.moshi}")
+    //Room
+    implementation("androidx.room:room-runtime:${Version.room}")
+    implementation("androidx.room:room-ktx:${Version.room}")
+    ksp("androidx.room:room-compiler:${Version.room}")
+    implementation("com.google.code.gson:gson:2.10.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

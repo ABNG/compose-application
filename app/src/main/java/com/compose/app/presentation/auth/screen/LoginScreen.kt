@@ -1,6 +1,7 @@
 package com.compose.app.presentation.auth.screen
 
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,8 @@ import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.compose.app.R
+import com.compose.app.data.firebase.model.UserModel
+import com.compose.app.data.firebase.model.toJson
 import com.compose.app.navigation.nav_graph.Graph
 import com.compose.app.navigation.nav_graph.auth.AuthDestination
 import com.compose.app.navigation.nav_graph.main.MainDestination
@@ -38,9 +41,9 @@ import com.compose.app.presentation.auth.bloc.RegistrationFormValidationEvent
 import com.compose.app.presentation.auth.bloc.RegistrationType
 import com.compose.app.presentation.auth.bloc.RegistrationViewModel
 import com.compose.app.presentation.auth.widget.CustomTextField
-import com.compose.app.presentation.util.UiState
 import com.compose.app.presentation.auth.widget.google_signin.GoogleSignInWidget
 import com.compose.app.presentation.auth.widget.google_signin.rememberGoogleSignInDialogState
+import com.compose.app.presentation.util.UiState
 import com.compose.app.presentation.util.widget.loading_dialog.LoadingDialogWidget
 import com.compose.app.presentation.util.widget.loading_dialog.rememberDialogState
 
@@ -67,8 +70,8 @@ fun LoginScreen(navController: NavHostController, modifier: Modifier = Modifier)
 
                 is UiState.Success -> {
                     dialogState.closeDialog()
-                    if (uiState.data!!.user != null) {
-                        navigateToMain(context,navController)
+                    if (uiState.data!!.user?.email != null) {
+                        navigateToMain(context, navController, uiState.data)
                     } else {
                         Toast.makeText(
                             context,
@@ -152,7 +155,7 @@ fun LoginScreen(navController: NavHostController, modifier: Modifier = Modifier)
                     state = googleSignInDialogState,
                     clientId = stringResource(R.string.web_client_id),
                 ) {
-                    navigateToMain(context,navController)
+                    navigateToMain(context, navController, it)
                 }
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -170,10 +173,15 @@ fun LoginScreen(navController: NavHostController, modifier: Modifier = Modifier)
     }
 }
 
-private fun navigateToMain(context: Context, navController: NavHostController) {
+private fun navigateToMain(
+    context: Context,
+    navController: NavHostController,
+    userModel: UserModel
+) {
     Toast.makeText(context, "SignIn Successful", Toast.LENGTH_LONG)
         .show()
-    navController.navigate(MainDestination.Main.route) {
+    val value = Uri.encode(userModel.toJson())
+    navController.navigate(MainDestination.Main.routeWithUserModel(userModel = value)) {
         popUpTo(Graph.AUTH) {
             inclusive = true
         }

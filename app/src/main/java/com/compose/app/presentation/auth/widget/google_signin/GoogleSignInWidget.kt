@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.compose.app.data.firebase.model.FirebaseUserModel
+import com.compose.app.data.firebase.model.UserModel
 import com.compose.app.presentation.util.UiState
 import com.compose.app.presentation.util.widget.loading_dialog.LoadingDialogWidget
 import com.compose.app.presentation.util.widget.loading_dialog.rememberDialogState
@@ -21,7 +21,7 @@ fun GoogleSignInWidget(
     googleAuthViewModel: GoogleAuthViewModel = hiltViewModel(),
     state: GoogleSignInDialogState,
     clientId: String,
-    onUserDataReceived: (FirebaseUserModel) -> Unit,
+    onUserDataReceived: (UserModel) -> Unit,
 ) {
     val context = LocalContext.current
     val oneTapClient = Identity.getSignInClient(context)
@@ -68,7 +68,7 @@ fun GoogleSignInWidget(
 
                 is UiState.Success -> {
                     dialogState.closeDialog()
-                    if (uiState.data!!.user != null) {
+                    if (uiState.data!!.user?.email != null) {
                         onUserDataReceived(uiState.data)
                     } else {
                         Toast.makeText(

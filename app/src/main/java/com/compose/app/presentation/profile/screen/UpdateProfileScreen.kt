@@ -1,5 +1,6 @@
 package com.compose.app.presentation.profile.screen
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -33,10 +35,13 @@ import com.compose.app.presentation.profile.widget.DatePickerWidget
 import com.compose.app.presentation.profile.widget.ImagePickerWidget
 import com.compose.app.presentation.util.widget.AppBarBackButtonWidget
 import com.compose.app.presentation.util.NoRippleInteractionSource
+import com.compose.app.presentation.util.UiState
+import com.compose.app.presentation.util.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdateProfileScreen(
+    userViewModel: UserViewModel,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     profileViewModel: UpdateProfileViewModel = hiltViewModel()
@@ -46,6 +51,52 @@ fun UpdateProfileScreen(
 
     val focusManager = LocalFocusManager.current
     val state = profileViewModel.state
+
+    LaunchedEffect(Unit) {
+        if (userViewModel.userModel?.user?.photoUrl != null) {
+            val uri = Uri.parse(userViewModel.userModel?.user?.photoUrl)
+            profileViewModel.onEvent(UpdateProfileFormEvent.UpdateImage(uri))
+        }
+        if (userViewModel.userModel?.user?.name != null) {
+            profileViewModel.onEvent(
+                UpdateProfileFormEvent.UpdateName(
+                    userViewModel.userModel?.user?.name ?: ""
+                )
+            )
+        }
+        if (userViewModel.userModel?.user?.dob != null) {
+            profileViewModel.onEvent(
+                UpdateProfileFormEvent.UpdateDOB(
+                    userViewModel.userModel?.user?.dob ?: ""
+                )
+            )
+        }
+        if (userViewModel.userModel?.user?.phoneNumber != null) {
+            profileViewModel.onEvent(
+                UpdateProfileFormEvent.UpdatePhoneNumber(
+                    userViewModel.userModel?.user?.phoneNumber ?: ""
+                )
+            )
+        }
+
+        profileViewModel.uiState.collect { uiState ->
+            when (uiState) {
+                is UiState.Success -> {
+                    userViewModel.updateUserModel(
+                        name = uiState.data?.name,
+                        image = uiState.data?.imageUri.toString(),
+                        dob = uiState.data?.dateOfBirth.toString(),
+                        phoneNumber = uiState.data?.phoneNumber.toString(),
+                    )
+                    navController.popBackStack()
+                }
+
+                else -> {
+
+                }
+            }
+        }
+    }
 
     Scaffold(topBar = {
         TopAppBar(

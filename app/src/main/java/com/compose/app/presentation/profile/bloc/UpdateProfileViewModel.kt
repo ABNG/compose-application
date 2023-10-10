@@ -4,11 +4,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.compose.app.domain.use_case.ValidateDOB
 import com.compose.app.domain.use_case.ValidateImage
 import com.compose.app.domain.use_case.ValidateName
 import com.compose.app.domain.use_case.ValidatePhoneNumber
+import com.compose.app.presentation.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +26,9 @@ class UpdateProfileViewModel @Inject constructor(
 
     var state by mutableStateOf(UpdateProfileFormState())
         private set
+
+    private val uiStateChannel = Channel<UiState<UpdateProfileFormState>>()
+    val uiState = uiStateChannel.receiveAsFlow()
 
     fun onEvent(event: UpdateProfileFormEvent) {
         when (event) {
@@ -77,7 +85,9 @@ class UpdateProfileViewModel @Inject constructor(
         }
 
         if (hasNoError) {
-            //do something here
+            viewModelScope.launch {
+                uiStateChannel.send(UiState.Success(data = state))
+            }
         }
 
     }

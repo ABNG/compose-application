@@ -1,5 +1,6 @@
 package com.compose.app.presentation.splash.screen
 
+import android.net.Uri
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateInt
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.compose.app.data.firebase.model.toJson
 import com.compose.app.navigation.nav_graph.Graph
 import com.compose.app.navigation.nav_graph.auth.AuthDestination
 import com.compose.app.navigation.nav_graph.main.MainDestination
@@ -87,8 +89,9 @@ fun SplashScreen(
         startAnimation = true
         delay(3000)
         navController.popBackStack()
-        if (firebaseAuthViewModel.currentSignedInUser().user != null) {
-            navController.navigate(MainDestination.Main.route)
+        if (firebaseAuthViewModel.currentSignedInUser().user?.email != null) {
+            val value = Uri.encode(firebaseAuthViewModel.currentSignedInUser().toJson())
+            navController.navigate(MainDestination.Main.routeWithUserModel(userModel = value))
         } else if (prefViewModel.read().showOnBoard) {
             navController.navigate(Graph.ONBOARD)
         } else {
