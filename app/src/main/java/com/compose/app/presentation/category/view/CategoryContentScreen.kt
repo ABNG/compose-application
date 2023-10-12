@@ -1,5 +1,6 @@
 package com.compose.app.presentation.category.view
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,11 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.HiltViewModelFactory
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -44,8 +40,8 @@ import com.compose.app.presentation.util.hiltViewModelWithKey
 import com.compose.app.presentation.util.widget.ErrorStateWidget
 import com.compose.app.presentation.util.widget.LoadingStateWidget
 import com.compose.app.presentation.util.widget.NoneStateWidget
-
-
+import com.compose.app.presentation.util.widget.loading_dialog.LoadingDialogWidget
+import com.compose.app.presentation.util.widget.loading_dialog.rememberDialogState
 
 
 @Composable
@@ -56,9 +52,37 @@ fun CategoryContentScreen(
     categoryContentViewModel: CategoryContentViewModel = hiltViewModelWithKey(key = categoryId.toString())
 ) {
     val productState = categoryContentViewModel.productState
+    val context = LocalContext.current
+    val dialogState = rememberDialogState()
     LaunchedEffect(Unit) {
         if (productState is UiState.None) {
             categoryContentViewModel.getAllProductsByCategoryId(categoryId, 0, 100)
+        }
+        categoryContentViewModel.uiState.collect { uiState ->
+            when (uiState) {
+                is UiState.Error -> {
+                    dialogState.closeDialog()
+                    Toast.makeText(context, uiState.errorMessage, Toast.LENGTH_LONG).show()
+                }
+
+                is UiState.Loading -> {
+                    dialogState.openDialog()
+                }
+
+                is UiState.Success -> {
+                    dialogState.closeDialog()
+                    Toast.makeText(context, "Product Added to cart", Toast.LENGTH_LONG).show()
+                }
+
+                else -> {
+                    Toast.makeText(
+                        context,
+                        "State is None",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
         }
     }
     when (productState) {
@@ -80,6 +104,9 @@ fun CategoryContentScreen(
         }
 
         is UiState.Success -> {
+            LoadingDialogWidget(
+                dialogState = dialogState
+            )
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(
@@ -148,7 +175,9 @@ fun CategoryContentScreen(
                             )
                             Spacer(modifier = modifier.padding(vertical = 5.dp))
                             Button(
-                                onClick = {},
+                                onClick = {
+                                    categoryContentViewModel.insertProduct(product)
+                                },
                                 modifier = modifier.align(alignment = Alignment.CenterHorizontally)
                             ) {
                                 Text("Add to Cart")

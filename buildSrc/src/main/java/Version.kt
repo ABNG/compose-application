@@ -1,5 +1,6 @@
 object Version {
 
+    const val lifecycleVersion = "2.6.2"
     const val hilt = "2.48"
     const val coil = "2.4.0"
     const val retrofit = "2.9.0"

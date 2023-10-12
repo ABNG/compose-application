@@ -1,5 +1,6 @@
 package com.compose.app.presentation.detail.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,8 @@ import com.compose.app.presentation.util.UiState
 import com.compose.app.presentation.util.widget.ErrorStateWidget
 import com.compose.app.presentation.util.widget.LoadingStateWidget
 import com.compose.app.presentation.util.widget.NoneStateWidget
+import com.compose.app.presentation.util.widget.loading_dialog.LoadingDialogWidget
+import com.compose.app.presentation.util.widget.loading_dialog.rememberDialogState
 
 @Composable
 fun DetailScreen(
@@ -44,9 +47,38 @@ fun DetailScreen(
 ) {
 
     val productState = detailViewModel.productState
+    val context = LocalContext.current
+    val dialogState = rememberDialogState()
+
     LaunchedEffect(Unit) {
         if (productState is UiState.None) {
             detailViewModel.getProductById()
+        }
+        detailViewModel.uiState.collect { uiState ->
+            when (uiState) {
+                is UiState.Error -> {
+                    dialogState.closeDialog()
+                    Toast.makeText(context, uiState.errorMessage, Toast.LENGTH_LONG).show()
+                }
+
+                is UiState.Loading -> {
+                    dialogState.openDialog()
+                }
+
+                is UiState.Success -> {
+                    dialogState.closeDialog()
+                    Toast.makeText(context, "Product Added to cart", Toast.LENGTH_LONG).show()
+                }
+
+                else -> {
+                    Toast.makeText(
+                        context,
+                        "State is None",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
         }
     }
 
@@ -70,6 +102,9 @@ fun DetailScreen(
 
         is UiState.Success -> {
             val productItem = productState.data!!
+            LoadingDialogWidget(
+                dialogState = dialogState
+            )
             Column(modifier = modifier.verticalScroll(rememberScrollState())) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -126,7 +161,7 @@ fun DetailScreen(
                 Spacer(modifier = modifier.padding(vertical = 15.dp))
                 Button(
                     onClick = {
-                        navController.popBackStack()
+                        detailViewModel.insertProduct(productItem)
                     },
                     modifier = modifier
                         .align(alignment = Alignment.CenterHorizontally)
