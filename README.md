@@ -1,5 +1,4 @@
  # Ecommerce Application
- ### 🚧 Work in progress 👷‍♀️⛏👷🔧️👷🔧 🚧
 
 ## Screenshots
 <details>
