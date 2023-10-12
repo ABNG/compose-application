@@ -30,6 +30,7 @@
     * [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) is a dependency injection library for Android that reduces the boilerplate of doing manual dependency injection in your project.
     * [Navigation-Compose](https://developer.android.com/jetpack/compose/navigation/) The Navigation component provides support for Jetpack Compose applications. You can navigate between composables while taking advantage of the Navigation component's infrastructure and features.
     * [Google Maps](https://developers.google.com/maps/documentation/android-sdk/maps-compose) Google Maps library for compose
+    * [Room](https://developer.android.com/topic/libraries/architecture/room) is a library for data storage persistence which provides an abstraction layer over SQLite.
  * [Kotlin coroutines](https://developer.android.com/kotlin/coroutines) Executing code asynchronously.
  * [StateFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) is a state-holder observable flow that emits the current and new state updates to its collectors.
  * [Coil-compose](https://coil-kt.github.io/coil/compose/) An image loading library for Android backed by Kotlin Coroutines.
