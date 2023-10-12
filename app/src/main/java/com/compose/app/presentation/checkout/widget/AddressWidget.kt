@@ -17,13 +17,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun AddressWidget(modifier: Modifier = Modifier) {
+fun AddressWidget(modifier: Modifier = Modifier, lat: Double, long: Double) {
     Box(
         modifier = modifier
             .padding(10.dp)
@@ -48,7 +47,7 @@ fun AddressWidget(modifier: Modifier = Modifier) {
                     tint = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 Text(
-                    "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+                    "latitude: $lat\nlongitude: $long",
                     modifier = modifier.weight(2f),
                     fontSize = 11.sp,
                     lineHeight = 15.sp,

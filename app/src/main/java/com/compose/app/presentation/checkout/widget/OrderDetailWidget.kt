@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun OrderDetailWidget(modifier: Modifier = Modifier) {
+fun OrderDetailWidget(modifier: Modifier = Modifier, subTotal: Double, total: Double) {
     Surface(
         modifier = modifier
             .padding(10.dp)
@@ -49,7 +49,7 @@ fun OrderDetailWidget(modifier: Modifier = Modifier) {
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )
                 Text(
-                    "AED 641.00",
+                    "SAR $subTotal",
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )
@@ -92,7 +92,7 @@ fun OrderDetailWidget(modifier: Modifier = Modifier) {
                     },
                 )
                 Text(
-                    "AED 641.00",
+                    "SAR $total",
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.inverseOnSurface
                 )

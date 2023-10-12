@@ -51,8 +51,9 @@ import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddressScreen(navController: NavHostController, modifier: Modifier = Modifier,
-                  viewModel: PermissionViewModel = hiltViewModel()
+fun AddressScreen(
+    navController: NavHostController, modifier: Modifier = Modifier,
+    viewModel: PermissionViewModel = hiltViewModel()
 ) {
     if (!viewModel.isPermissionGranted) {
         RequestPermissionDialog(
@@ -89,24 +90,33 @@ fun AddressScreen(navController: NavHostController, modifier: Modifier = Modifie
 
         Scaffold(
             topBar = {
-                TopAppBar(title = {
-                    Text("Map Screen")
-                },
+                TopAppBar(
+                    title = {
+                        Text("Map Screen")
+                    },
                     navigationIcon = {
                         AppBarBackButtonWidget(navController)
-                    },)
+                    },
+                )
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = {
                     Timber.wtf(message = markerState.position.toString())
-                    navController.navigate(MainDestination.Checkout.route)
+                    navController.navigate(
+                        MainDestination.Checkout.routeWithLatLong(
+                            lat = markerState.position.latitude.toFloat(),
+                            long = markerState.position.longitude.toFloat()
+                        )
+                    )
                 }) {
                     Text(text = "Confirm Location", modifier = modifier.padding(horizontal = 15.dp))
                 }
             },
             floatingActionButtonPosition = FabPosition.Center
         ) {
-            Box(modifier = modifier.fillMaxSize().padding(it)) {
+            Box(modifier = modifier
+                .fillMaxSize()
+                .padding(it)) {
                 GoogleMap(
                     cameraPositionState = cameraPositionState,
                     properties = mapProperties,

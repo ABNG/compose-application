@@ -59,8 +59,11 @@ fun MainNavGraph(navController: NavHostController, modifier: Modifier = Modifier
         composable(route = MainDestination.Address.route) {
             AddressScreen(navController)
         }
-        composable(route = MainDestination.Checkout.route) {
-            CheckoutScreen(navController)
+        composable(route = MainDestination.Checkout.route,
+            arguments = MainDestination.Checkout.arguments) {
+            val lat = it.arguments?.getFloat("lat")
+            val long = it.arguments?.getFloat("long")
+            CheckoutScreen(navController, lat = lat?.toDouble(), long = long?.toDouble())
         }
         composable(route = MainDestination.Success.route) {
             SuccessScreen(navController)

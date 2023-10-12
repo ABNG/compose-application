@@ -23,6 +23,7 @@ class ProductDBRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteProduct(product: ProductModelItem) = cartDao.deleteProduct(product)
+    override suspend fun deleteAllProducts() = cartDao.deleteAllProducts()
 
     override suspend fun updateProductQuantity(productQuantity: Int, productId: Int) =
         cartDao.updateProductQuantity(productQuantity, productId)

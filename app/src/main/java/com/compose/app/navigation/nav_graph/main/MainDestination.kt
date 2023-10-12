@@ -16,14 +16,16 @@ sealed class MainDestination(
     @StringRes val title: Int? = null,
     val icon: ImageVector? = null
 ) {
-    data object Main : MainDestination("main/{user}"){
+    data object Main : MainDestination("main/{user}") {
         val arguments = listOf(
             navArgument("user") {
                 type = NavType.StringType
             }
         )
+
         fun routeWithUserModel(userModel: String) = "main/$userModel"
     }
+
     data object Home : MainDestination("home", R.string.home, Icons.Default.Home)
     data object Category : MainDestination("category", R.string.category, Icons.Default.Search)
     data object Cart : MainDestination("cart", R.string.cart, Icons.Default.ShoppingCart)
@@ -34,11 +36,24 @@ sealed class MainDestination(
                 type = NavType.IntType
             }
         )
+
         fun routeWithProductId(productId: Int) = "detail/$productId"
     }
 
     data object Address : MainDestination("address")
-    data object Checkout : MainDestination("checkout")
+    data object Checkout : MainDestination("checkout/{lat}/{long}") {
+        val arguments = listOf(
+            navArgument("lat") {
+                type = NavType.FloatType
+            },
+            navArgument("long") {
+                type = NavType.FloatType
+            }
+        )
+
+        fun routeWithLatLong(lat: Float, long: Float) = "checkout/$lat/$long"
+    }
+
     data object Success : MainDestination("success")
     data object UpdateProfile : MainDestination("update_profile")
 

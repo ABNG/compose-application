@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.compose.app.navigation.nav_graph.main.MainDestination
 import com.compose.app.presentation.checkout.widget.AddressWidget
@@ -28,6 +30,7 @@ import com.compose.app.presentation.checkout.widget.OrderDetailWidget
 import com.compose.app.presentation.checkout.widget.PaymentOptionWidget
 import com.compose.app.presentation.checkout.widget.PlaceOrderWidget
 import com.compose.app.presentation.util.widget.AppBarBackButtonWidget
+import kotlinx.collections.immutable.toImmutableList
 
 
 enum class PaymentOptionType(val typeName: String) {
@@ -36,23 +39,40 @@ enum class PaymentOptionType(val typeName: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CheckoutScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun CheckoutScreen(
+    navController: NavHostController, modifier: Modifier = Modifier,
+    lat: Double? = null, long: Double? = null,
+    checkoutViewModel: CheckoutViewModel = hiltViewModel()
+) {
     val configuration = LocalConfiguration.current
     var selectedPaymentOption by remember {
         mutableStateOf(PaymentOptionType.CARD)
     }
+
+    val productList = checkoutViewModel.products
+
+    val subTotal = productList.fold(0) { acc, product ->
+        acc + (product.price * product.quantity)
+    }.toDouble()
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Text("Checkout")
-            },
+            TopAppBar(
+                title = {
+                    Text("Checkout")
+                },
                 navigationIcon = {
                     AppBarBackButtonWidget(navController)
-                },)
+                },
+            )
         },
         bottomBar = {
-            PlaceOrderWidget {
-                navController.navigate(MainDestination.Success.route)
+            PlaceOrderWidget(productCount = productList.size, total = subTotal) {
+                checkoutViewModel.clearProductDB()
+                navController.navigate(MainDestination.Success.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        inclusive = false
+                    }
+                }
             }
         }
     ) {
@@ -62,9 +82,14 @@ fun CheckoutScreen(navController: NavHostController, modifier: Modifier = Modifi
                 .padding(it)
                 .verticalScroll(rememberScrollState())
         ) {
-            AddressWidget(modifier = modifier)
+            if (lat != null && long != null) {
+                AddressWidget(modifier = modifier, lat, long)
+            }
             Divider(thickness = 12.dp, color = MaterialTheme.colorScheme.background)
-            CartWidget(modifier = modifier,configuration = configuration)
+            CartWidget(
+                modifier = modifier, configuration = configuration,
+                productList = productList.toImmutableList()
+            )
             Spacer(modifier = modifier.padding(vertical = 10.dp))
             Divider(thickness = 12.dp, color = MaterialTheme.colorScheme.background)
             PaymentOptionWidget(
@@ -75,7 +100,7 @@ fun CheckoutScreen(navController: NavHostController, modifier: Modifier = Modifi
                 }
             )
             Divider(thickness = 2.dp, color = MaterialTheme.colorScheme.background)
-            OrderDetailWidget(modifier = modifier)
+            OrderDetailWidget(modifier = modifier, subTotal = subTotal, total = subTotal)
 
         }
 

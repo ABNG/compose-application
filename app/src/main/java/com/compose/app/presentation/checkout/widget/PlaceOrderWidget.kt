@@ -17,11 +17,14 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.compose.app.navigation.nav_graph.main.MainDestination
 
 @Composable
-fun PlaceOrderWidget(modifier: Modifier = Modifier,
-                     onClick:()->Unit) {
+fun PlaceOrderWidget(
+    modifier: Modifier = Modifier,
+    productCount: Int,
+    total: Double,
+    onClick: () -> Unit
+) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RectangleShape
@@ -34,13 +37,14 @@ fun PlaceOrderWidget(modifier: Modifier = Modifier,
                 modifier = modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("4 items", color = MaterialTheme.colorScheme.onPrimaryContainer)
-                Text("AED 641.00", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Text("$productCount items", color = MaterialTheme.colorScheme.onPrimaryContainer)
+                Text("SAR $total", color = MaterialTheme.colorScheme.onPrimaryContainer)
             }
             Spacer(modifier = modifier.padding(top = 15.dp))
             Button(
                 modifier = modifier.fillMaxWidth(0.7f),
-                onClick = onClick) {
+                onClick = onClick
+            ) {
                 Text("Place Order", fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
         }
